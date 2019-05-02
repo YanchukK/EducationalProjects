@@ -14,57 +14,25 @@ namespace Millionaire
             string q2 = "When ?\na\nb now\nc\nd";
             string q3 = "Why ?\na\nb\nc because\nd";
             string win = "You win";
-            string fail = "You faild on question № ";
+            string fail = "You faild on question ";
+            string playagain = "Do you want play again?";
             string[] variants = new string[4] { "a", "b", "c", "d" };
-
-            string q1_rus = "Кто ?\nа я\nб\nв\nг";
-            string q2_rus = "Когда ?\nа\nб сейчас\nв\nг";
-            string q3_rus = "Почему ?\nа\nб\nв потому что\nг";
-            string win_rus = "Вы победили";
-            string fail_rus = "Вы проиграли на вопросе № ";
-            string[] variants_rus = new string[4] { "а", "б", "в", "г" };
-
 
             Console.WriteLine("На каком языке Вы хотите играть?\n1. рус\n2. eng");
             string answer = Console.ReadLine();
 
             if (answer == "рус" || answer == "1")
             {
-                Console.WriteLine(q1_rus);
-                answer = Console.ReadLine();
-
-                if (answer == variants_rus[0])
-                {
-                    Console.WriteLine(win_rus);
-                    Console.WriteLine(q2_rus);
-                    answer = Console.ReadLine();
-                    if (answer == variants_rus[1])
-                    {
-                        Console.WriteLine(win_rus);
-                        Console.WriteLine(q3_rus);
-                        answer = Console.ReadLine();
-                        if (answer == variants_rus[2])
-                        {
-                            Console.WriteLine(win_rus);
-                        }
-                        else
-                        {
-
-                            Console.WriteLine(fail_rus + 3);
-                        }
-                    }
-                    else
-                    {
-
-                        Console.WriteLine(fail_rus + 2);
-                    }
-                }
-                else
-                {
-                    Console.WriteLine(fail_rus + 1);
-                }
+                q1 = "Кто ?\nа я\nб\nв\nг";
+                q2 = "Когда ?\nа\nб сейчас\nв\nг";
+                q3 = "Почему ?\nа\nб\nв потому что\nг";
+                win = "Вы победили";
+                fail = "Вы проиграли на вопросе ";
+                playagain = "Вы бы хотели сыграть еще раз?";
+                variants = new string[4] { "а", "б", "в", "г" };
             }
-            else if (answer == "eng" || answer == "2")
+
+            do
             {
                 Console.WriteLine(q1);
                 answer = Console.ReadLine();
@@ -82,28 +50,26 @@ namespace Millionaire
                         if (answer == variants[2])
                         {
                             Console.WriteLine(win);
+                            Console.WriteLine(playagain);
                         }
                         else
                         {
-
                             Console.WriteLine(fail + 3);
+                            Console.WriteLine(playagain);
                         }
                     }
                     else
                     {
-
                         Console.WriteLine(fail + 2);
+                        Console.WriteLine(playagain);
                     }
                 }
                 else
                 {
                     Console.WriteLine(fail + 1);
+                    Console.WriteLine(playagain);
                 }
-            }
-            else
-            {
-                Console.WriteLine("Вариант введен некорректно");
-            }
+            } while (Console.ReadLine() == "Yes");
         }
     }
 }
