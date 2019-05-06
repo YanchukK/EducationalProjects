@@ -14,9 +14,9 @@ namespace Millionaire
 
             int max = 0;
 
-            for (int i = 0; i < mas.Length-1; i++)
+            for (int i = 0; i < mas.Length; i++)
             {
-                if(mas[i] > mas[i + 1])
+                if(mas[i] > max)
                 {
                     max = mas[i];
                 }
