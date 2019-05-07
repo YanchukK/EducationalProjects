@@ -43,6 +43,7 @@ namespace Millionaire
                         Console.WriteLine(array[i]);
                     }
                 }
+                counter = 0;
             }
         }
     }
