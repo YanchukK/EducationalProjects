@@ -121,13 +121,10 @@ namespace Millionaire
             {
                 int counter = 0;
 
-                int cj = 0;
-
                 for (int i = 0; i < main.Length; i++)
                 {
                     if (main[i] == substring[counter])
                     {
-                        cj = i;
                         counter++;
                     }
                     else
@@ -137,7 +134,6 @@ namespace Millionaire
 
                     if (counter == substring.Length)
                     {
-                        counter = cj;
                         return true;
                     }
                 }
