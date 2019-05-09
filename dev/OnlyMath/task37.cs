@@ -71,7 +71,7 @@ namespace Millionaire
 
             for (int i = 0; i < cards.Length; i++)
             {
-                cardsStr += $"Card{i + 1}:Suit={cards[i].Suit};Value={cards[i].Value};\n";
+                cardsStr += $"Card{i + 1}:Suit={(int)cards[i].Suit};Value={(int)cards[i].Value};\n";
             }
 
             File.WriteAllText("Cards.txt", cardsStr);
