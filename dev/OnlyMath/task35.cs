@@ -67,11 +67,6 @@ namespace Millionaire
                 s++;
             }
 
-            for (int i = 0; i < cards.Length; i++)
-            {
-                Console.WriteLine(cards[i].Suit + " " + cards[i].Value);
-            }
-
             Console.WriteLine();
 
             Card[] mixedcards = new Card[36];
@@ -82,7 +77,6 @@ namespace Millionaire
 
             do
             {
-
                 for (int i = 0; i < randmas.Length; i++)
                 {
                     if (IsEquals(v = random.Next(0, 36), 0))
@@ -101,15 +95,6 @@ namespace Millionaire
                     }
                 }
             } while (!IsFourAces());
-
-
-
-            for (int i = 0; i < mixedcards.Length; i++)
-            {
-                if(mixedcards[i].Value == (Value)10)
-                    Console.WriteLine(mixedcards[i].Suit + " " + mixedcards[i].Value);
-            }
-
 
             bool IsEquals(int v1, int v2)
             {
