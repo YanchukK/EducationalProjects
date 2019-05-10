@@ -30,14 +30,8 @@ namespace Millionaire
 
             for (int i = 0; i < array.Length; i++)
             {
-                if (IsEquals(v = random.Next(max - length, max), 0))
+                if (!IsContains(array, v = random.Next(max - length, max), i))
                 {
-                    //mixedcards[i] = cards[v];
-                    array[i] = v;
-                }
-                else if (!IsContains(array, v = random.Next(max - length, max), (i + 1)))
-                {
-                    //mixedcards[i] = cards[v];
                     array[i] = v;
                 }
                 else
@@ -46,18 +40,9 @@ namespace Millionaire
                 }
             }
 
-            bool IsEquals(int v1, int v2)
-            {
-                if (v1 == v2)
-                {
-                    return true;
-                }
-                return false;
-            }
-
             bool IsContains(int[] array1, int value, int index)
             {
-                for (int i = 0; i < array1.Length; i++)
+                for (int i = 0; i < index; i++)
                 {
                     if (array1[i] == value)
                     {
