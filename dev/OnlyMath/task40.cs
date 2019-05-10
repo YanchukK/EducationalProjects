@@ -59,11 +59,6 @@ namespace Millionaire
                 }
             }
 
-            for (int i = 0; i < array.Length; i++)
-            {
-                Console.Write(array[i] + " ");
-            }
-
             bool IsContains(int[] array1, int value, int index)
             {
                 for (int i = 0; i < index; i++)
