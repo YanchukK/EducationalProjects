@@ -64,16 +64,6 @@ namespace Millionaire
                 Console.Write(array[i] + " ");
             }
 
-
-            bool IsEquals(int v1, int v2)
-            {
-                if (v1 == v2)
-                {
-                    return true;
-                }
-                return false;
-            }
-
             bool IsContains(int[] array1, int value, int index)
             {
                 for (int i = 0; i < index; i++)
