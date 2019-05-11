@@ -27,14 +27,13 @@ namespace Millionaire
             Jack = 2,
             Lady,
             King,
-            Ace = 11 
+            Ace = 11
         }
 
         struct Card
         {
             public Suit Suit;
-            public Value Value; // ценность карты
-            //public string Name; // имя 6, 7, 8, 9, 10, валет - 2, дама - 3, король - 4, туз - 11
+            public Value Value; // ценность карты // имя 6, 7, 8, 9, 10, валет - 2, дама - 3, король - 4, туз - 11
         }
 
         static void Main(string[] args)
@@ -43,13 +42,13 @@ namespace Millionaire
 
             Card[] cards = new Card[36];
 
-            int s = 0;
+            int suit = 0; // идентификатор карты
 
             for (int i = 0; i < 36;)
             {
-                for (int j = 11; j < (2 + 10); j++) // j = 11, потому что первый в колоде тух
+                for (int j = 11; j < (2 + 10); j++) // j = 11, потому что первый в колоде туз
                 {
-                    cards[i] = new Card { Suit = (Suit)s, Value = (Value)j };
+                    cards[i] = new Card { Suit = (Suit)suit, Value = (Value)j };
                     if (j == 11) // потом идут 6, 7, 8, 9, 10
                     {
                         j = 5;
@@ -64,23 +63,18 @@ namespace Millionaire
                     }
                     i++;
                 }
-                s++;
+                suit++;
             }
 
-            Card[] mixedcards = new Card[36];
-            Random random = new Random(); 
+            Card[] mixedcards = new Card[36]; // массив перемешанных карт
+            Random random = new Random();
             int[] randmas = new int[36]; // массив для проверки, существует
                                          // ли уже такое сгенерированное число
             int v = 0;
 
             for (int i = 0; i < randmas.Length; i++)
             {
-                if (IsEquals(v = random.Next(0, 36), 0))
-                {
-                    mixedcards[i] = cards[v];
-                    randmas[i] = v;
-                }
-                else if (!IsContains(randmas, v = random.Next(0, 36)))
+                if (!IsContains(randmas, v = random.Next(0, 36), i))
                 {
                     mixedcards[i] = cards[v];
                     randmas[i] = v;
@@ -91,18 +85,9 @@ namespace Millionaire
                 }
             }
 
-            bool IsEquals(int v1, int v2)
+            bool IsContains(int[] array, int value, int index)
             {
-                if(v1 == v2)
-                {
-                    return true;
-                }
-                return false;
-            }
-
-            bool IsContains(int[] array, int value)
-            {
-                for (int i = 0; i < array.Length; i++)
+                for (int i = 0; i < index; i++)
                 {
                     if (array[i] == value)
                     {
