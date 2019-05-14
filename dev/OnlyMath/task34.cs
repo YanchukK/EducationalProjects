@@ -85,18 +85,23 @@ namespace Millionaire
                 }
             }
 
-            bool IsContains(int[] array, int value, int index)
+            for (int i = 0; i < mixedcards.Length; i++)
             {
-                for (int i = 0; i < index; i++)
-                {
-                    if (array[i] == value)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                Console.WriteLine(mixedcards[i].Suit + " " + mixedcards[i].Value);
             }
+        }
+
+        public static bool IsContains(int[] array, int value, int index)
+        {
+            for (int i = 0; i < index; i++)
+            {
+                if (array[i] == value)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
