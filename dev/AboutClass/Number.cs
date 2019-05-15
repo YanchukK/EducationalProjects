@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Millionaire
+namespace AboutClass
 {
     class Number
     {
@@ -48,27 +47,49 @@ namespace Millionaire
         public string Print()
         {
             string minus = "";
-            if(x < 0 || y < 0)
+            if (x < 0 || y < 0)
             {
                 minus = "-";
-                if(x < 0)
-                {
-                    x *= -1;
-                }
-                if (y < 0)
-                {
-                    y *= -1;
-                }
+                x = Math.Abs(x);
+                y = Math.Abs(y);
             }
 
-            if(x > y)
+            if (x > y)
             {
-                minus += x/y;
+                minus += x / y;
             }
 
-            // сократить
+            x = x - (x / y) * y;
+
+            int nod = Nod(x, y);
+
+            if (nod != 0)
+            {
+                x /= nod;
+                y /= nod;
+            }
+
+            minus += $" {x}/{y}";
+
+            return minus;
         }
-        
+
+        private int Nod(int n, int d)
+        {
+            while (d != 0 && n != 0)
+            {
+                if (n % d > 0)
+                {
+                    var temp = n;
+                    n = d;
+                    d = temp % d;
+                }
+                else break;
+            }
+            if (d != 0 && n != 0)
+                return d;
+            return 0;
+        }
 
         public void Sum(int value)
         {
@@ -121,20 +142,19 @@ namespace Millionaire
             y *= value.x;
         }
     }
-    
+
 
     class Program
     {
         static void Main(string[] args)
         {
-            Number number = new Number(1, 2);
+            Number number = new Number(46, 25);
 
-            Number number1 = new Number(2, 2);
+            Number number1 = new Number(2, 50);
 
-            number.Sum(-11);
+            number.Sum(number1);
 
             Console.WriteLine(number.Print());
-
         }
     }
 }
