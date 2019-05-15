@@ -122,7 +122,7 @@ namespace Millionaire
                     else
                     {
                         Console.WriteLine(yourTotalCards == 21 ? "You have 21 point. Congratulations!"
-                            : "Computor have 21 point. Computor is winner!");
+                            : "Computer have 21 point. Computer is winner!");
                         break;
                     }
                 }
@@ -135,7 +135,7 @@ namespace Millionaire
                     else
                     {
                         Console.WriteLine(yourTotalCards == 22 ? "You have 2 aces. Congratulations!"
-                            : "Computor have 2 aces. Computor is winner!");
+                            : "Computer have 2 aces. Computer is winner!");
                         break;
                     }
                 }
