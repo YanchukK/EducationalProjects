@@ -220,6 +220,41 @@ namespace AboutClass
 
         // Получать список всех счетов
         
+                public Account[] GetAccounts()
+        {
+            int accNumber = 0;
+
+            for (int i = 0; i < clients.Length; i++)
+            {
+                accNumber += clients[i].GetAccounts().Length;
+            }
+
+            Account[] accounts = new Account[accNumber];
+
+            int length = 0;
+
+            for (int i = 0; i < accounts.Length; i++)
+            {
+                for (int j = 0; j < clients[length].GetAccounts().Length; j++)
+                {
+                    accounts[i] = clients[length].GetAccounts()[j];
+                    length++;
+                }
+
+            }
+            return accounts;
+        }
+        // метод не работает
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         public void OpenAnAccount(Client client, Money money)
         {
             Account newAccount = new Account(money);
