@@ -19,6 +19,8 @@ namespace AboutClass
         {
             name = Name;
             surname = Surname;
+            // this.accounts = new Account[0];
+            // поэтому не нужны проверки на null
         }
 
         public Client(string Name, string Surname, Account[] Accounts)
@@ -34,7 +36,7 @@ namespace AboutClass
         }
 
         public void AddAccount(Account account)
-        {      
+        {
             if (accounts != null)
             {
                 Account[] newAccounts;
@@ -48,9 +50,10 @@ namespace AboutClass
                         newAccounts[i] = accounts[i];
                         i++;
                     }
-
+                    
                     newAccounts[i] = account;
                 }
+                // newAccounts[length] = account; поэтому можно без вайл?
                 accounts = newAccounts;
             }
             else
@@ -124,7 +127,7 @@ namespace AboutClass
         }
 
         private void SetHryvnia(int value)
-        {             
+        {
             if (value >= 0)
             {
                 hryvnia = value;
@@ -149,7 +152,7 @@ namespace AboutClass
 
         public void Print()
         {
-            if(coin > 100)
+            if (coin > 100)
             {
                 hryvnia += 1;
                 coin -= 100;
@@ -173,11 +176,15 @@ namespace AboutClass
             return money1; /*new Money { Value = c1.Value + c2.Value }*/
         }
 
+
+        // исправить, потому что деньги неизменяемый тип!
         public static Money operator -(Money money1, Money money2)
         {
-            if(money2.hryvnia > money1.hryvnia)
+            // создать новый тип. Концепция: если прибавть 10 к 5, 5 не привраться в 15 
+
+            if (money2.hryvnia > money1.hryvnia)
             {
-                if(money2.coin > money1.coin)
+                if (money2.coin > money1.coin)
                     Console.WriteLine("Недостаточно средств");
             }
             else
@@ -197,7 +204,7 @@ namespace AboutClass
         }
     }
 
-    class Bank
+    class Bank // все классы сложить в банк, клиент и деньги ничего не знают о банке, но банк все знает о них
     {
         // Есть класс Банк, он содержит в себе список
         // клиентов и счетов. Не у всех клиентов могут
@@ -218,43 +225,11 @@ namespace AboutClass
             return clients;
         }
 
-        // Получать список всех счетов
-        
-                public Account[] GetAccounts()
-        {
-            int accNumber = 0;
 
-            for (int i = 0; i < clients.Length; i++)
-            {
-                accNumber += clients[i].GetAccounts().Length;
-            }
+        // получить список всех счетов
 
-            Account[] accounts = new Account[accNumber];
 
-            int length = 0;
 
-            for (int i = 0; i < accounts.Length; i++)
-            {
-                for (int j = 0; j < clients[length].GetAccounts().Length; j++)
-                {
-                    accounts[i] = clients[length].GetAccounts()[j];
-                    length++;
-                }
-
-            }
-            return accounts;
-        }
-        // метод не работает
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         public void OpenAnAccount(Client client, Money money)
         {
             Account newAccount = new Account(money);
@@ -327,7 +302,6 @@ namespace AboutClass
                     break;
                 }
             }
-
             return accountId;
         }
     }
@@ -345,7 +319,7 @@ namespace AboutClass
             Client me = new Client("Kate", "Yanchuk", accounts);
             Client notme = new Client("Name", "Surname");
             Client[] clients = new Client[] { me, notme };
-                
+
             Bank bank = new Bank(clients);
 
             bank.Put(me, myFirstAccount, nineAndFifty);
@@ -365,6 +339,9 @@ namespace AboutClass
             bank.OpenAnAccount(notme, tenandninetynine);
 
             notme.GetWholeBalance().Print();
+
+
+            bank.GetAccounts();
         }
     }
 }
