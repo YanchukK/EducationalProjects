@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace AboutClass
 {
+    // уже можно разбить по отдельным файлам
+    
     class Client
     {
         // У клиента есть имя и фамилия, и список его счетов.
