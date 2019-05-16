@@ -15,6 +15,12 @@ namespace AboutClass
         private string surname;
         Account[] accounts;
 
+        public Client(string Name, string Surname)
+        {
+            name = Name;
+            surname = Surname;
+        }
+
         public Client(string Name, string Surname, Account[] Accounts)
         {
             name = Name;
@@ -22,10 +28,41 @@ namespace AboutClass
             accounts = Accounts;
         }
 
+        public Account[] GetAccounts()
+        {
+            return accounts;
+        }
+
+        public void AddAccount(Account account)
+        {      
+            if (accounts != null)
+            {
+                Account[] newAccounts;
+
+                newAccounts = new Account[accounts.Length + 1];
+
+                for (int i = 0; i < newAccounts.Length; i++)
+                {
+                    while (i != (newAccounts.Length - 1))
+                    {
+                        newAccounts[i] = accounts[i];
+                        i++;
+                    }
+
+                    newAccounts[i] = account;
+                }
+                accounts = newAccounts;
+            }
+            else
+            {
+                accounts = new Account[] { account };
+            }
+        }
+
         // Методы для получения баланса по счетам.
         public Money GetWholeBalance() // работает?
         {
-            Money wholeBalance = null;
+            Money wholeBalance = new Money(0, 0);
 
             for (int i = 0; i < accounts.Length; i++)
             {
@@ -45,23 +82,6 @@ namespace AboutClass
         {
             accounts[accountId] = new Account(money);
         }
-
-        public void AddAccount(Money money)
-        {
-            Account newAccount = new Account(money);
-
-            Account[] newAccounts = new Account[accounts.Length + 1];
-
-            for (int i = 0; i < newAccounts.Length; i++)
-            {
-                while(i != (newAccounts.Length - 1))
-                {
-                    newAccounts[i] = accounts[i];
-                    i++;
-                }
-                newAccounts[i] = newAccount;
-            }
-        }
     }
 
     class Account
@@ -69,8 +89,6 @@ namespace AboutClass
         // У счета есть Деньги - баланс, ставка. На счет
         // можно переводить деньги и снимать их. Менять ставку.
         // Делать это может только банк.
-
-        //private int balance;
 
         Money balance;
 
@@ -99,20 +117,13 @@ namespace AboutClass
             SetAll(Hryvnia, Coin);
         }
 
-        public void SetAll(int Hryvnia, int Coin)
+        private void SetAll(int Hryvnia, int Coin)
         {
-            if(Hryvnia == 0 && Coin == 0)
-            {
-                Console.WriteLine("Nice try");
-            }
-            else
-            {
-                SetHryvnia(Hryvnia);
-                SetY(Coin);
-            }
+            SetHryvnia(Hryvnia);
+            SetCoins(Coin);
         }
 
-        public void SetHryvnia(int value)
+        private void SetHryvnia(int value)
         {             
             if (value >= 0)
             {
@@ -124,7 +135,7 @@ namespace AboutClass
             }
         }
 
-        public void SetY(int value)
+        private void SetCoins(int value)
         {
             if (value >= 0 && value < 100)
             {
@@ -136,27 +147,16 @@ namespace AboutClass
             }
         }
 
-        //public double ReturnDouble()
-        //{
-        //    string result = $"{hryvnia}.{coin}";
+        public void Print()
+        {
+            if(coin > 100)
+            {
+                hryvnia += 1;
+                coin -= 100;
+            }
 
-        //    return double.Parse(result);
-        //}
-
-        //public Money Sum(Money value)
-        //{
-        //    value.hryvnia += this.hryvnia;
-        //    value.coin += this.coin;
-
-        //    if(value.coin > 100)
-        //    {
-        //        int hr = value.coin / 100;
-        //        value.hryvnia += hr;
-        //        value.coin -= hr;
-        //    }
-
-        //    return value;            
-        //}
+            Console.WriteLine($"{hryvnia} hgn {coin} kop");
+        }
 
         public static Money operator +(Money money1, Money money2)
         {
@@ -195,55 +195,6 @@ namespace AboutClass
 
             return money1;
         }
-
-
-
-        //public void Sum(Number value)
-        //{
-        //    if (y == value.y)
-        //    {
-        //        x += value.x;
-        //    }
-        //    else
-        //    {
-        //        x = value.x * y + value.y * x;
-        //        y = value.y * y;
-        //    }
-        //}
-
-        //public void Dif(int value)
-        //{
-        //    x -= value * y;
-        //}
-
-        //public void Dif(Number value)
-        //{
-        //    x = value.y * x - value.x * y;
-        //    y = value.y * y;
-        //}
-
-        //public void Product(int value)
-        //{
-        //    x *= value;
-        //}
-
-        //public void Product(Number value)
-        //{
-        //    x *= value.x;
-        //    y *= value.y;
-        //}
-
-        //public void Div(int value)
-        //{
-        //    y *= value;
-        //}
-
-        //public void Div(Number value)
-        //{
-        //    x *= value.y;
-        //    y *= value.x;
-        //}
-
     }
 
     class Bank
@@ -261,9 +212,16 @@ namespace AboutClass
             this.clients = Clients;
         }
 
-        public void OpenAnAccount(int clientId, Money money)
+        public Client[] GetClients()
         {
-            clients[clientId].AddAccount(money);
+            return clients;
+        }
+
+        public void OpenAnAccount(Client client, Money money)
+        {
+            Account newAccount = new Account(money);
+
+            client.AddAccount(newAccount);
         }
 
         public void AddClient(Client client)
@@ -283,15 +241,56 @@ namespace AboutClass
 
 
         // снять
-        public void Withdraw(int clientId, int accountId, Money money)
+        public void Withdraw(Client client, Account account, Money money)
         {
+            int clientId = ClientId(client);
+
+            int accountId = AccountId(client, account);
+
             clients[clientId].SetBalance(accountId, clients[clientId].GetBalance(accountId) - money);
         }
 
         // перевести деньги
-        public void Put(int clientId, int accountId, Money money)
+        public void Put(Client client, Account account, Money money)
         {
+            int clientId = ClientId(client);
+
+            int accountId = AccountId(client, account);
+
             clients[clientId].SetBalance(accountId, clients[clientId].GetBalance(accountId) + money);
+        }
+
+        private int ClientId(Client client)
+        {
+            int clientId = 0;
+            for (int i = 0; i < clients.Length; i++)
+            {
+                if (clients[i] == client)
+                {
+                    clientId = i;
+                    break;
+                }
+            }
+
+            return clientId;
+        }
+
+        private int AccountId(Client client, Account account)
+        {
+            int clientId = ClientId(client);
+
+            int accountId = 0;
+            int n = clients[clientId].GetAccounts().Length;
+            for (int i = 0; i < n; i++)
+            {
+                if (clients[clientId].GetAccounts()[i] == account)
+                {
+                    accountId = i;
+                    break;
+                }
+            }
+
+            return accountId;
         }
     }
 
@@ -302,15 +301,32 @@ namespace AboutClass
             Money elevenhr = new Money(11, 0);
             Money nineAndFifty = new Money(9, 50);
 
-            Account myAccount = new Account(elevenhr);
-            Account[] accounts = new Account[] { myAccount };
+            Account myFirstAccount = new Account(elevenhr);
+            Account[] accounts = new Account[] { myFirstAccount };
 
             Client me = new Client("Kate", "Yanchuk", accounts);
-            Client[] clients = new Client[] { me };
+            Client notme = new Client("Name", "Surname");
+            Client[] clients = new Client[] { me, notme };
                 
             Bank bank = new Bank(clients);
 
-            bank.Withdraw(0, 0, nineAndFifty);
+            bank.Put(me, myFirstAccount, nineAndFifty);
+
+            Money wholeMoney = me.GetWholeBalance();
+
+            bank.Withdraw(me, myFirstAccount, nineAndFifty);
+
+
+            // Добавить клиенту без счетов счет
+
+            bank.OpenAnAccount(notme, nineAndFifty);
+
+            notme.GetWholeBalance().Print();
+
+            Money tenandninetynine = new Money(10, 99);
+            bank.OpenAnAccount(notme, tenandninetynine);
+
+            notme.GetWholeBalance().Print();
         }
     }
 }
