@@ -212,11 +212,14 @@ namespace AboutClass
             this.clients = Clients;
         }
 
+        // Получать список всех клиентов
         public Client[] GetClients()
         {
             return clients;
         }
 
+        // Получать список всех счетов
+        
         public void OpenAnAccount(Client client, Money money)
         {
             Account newAccount = new Account(money);
