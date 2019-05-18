@@ -83,6 +83,11 @@ namespace Painting
                 lines[i].Render(graphics);
             }
         }
+
+        public void Update(Cross cross)
+        {
+
+        }
     }
 
 
@@ -101,7 +106,7 @@ namespace Painting
             while (true)
             {
                 graphics.FillRectangle(0xFFFFFFFF, 0, 0, graphics.ClientWidth, graphics.ClientHeight);
-                //graphics.DrawString("0", drawFont, 0xFF00FF00, 200, 500);
+                graphics.DrawString("0", "Arial", 0xFF00FFFF, 200, 500, 50);
                 field.Render(graphics);
                 if (Input.IsMouseLeftButtonDown)
                 {
