@@ -25,12 +25,16 @@ namespace Millionaire
 
     class Book : ArtWork
     {
-        public Book(string name, int year) : base(name, year)
-        { }
+        public string Genre { get; set; }
+
+        public Book(string name, int year, string genre) : base(name, year)
+        {
+            this.Genre = genre;
+        }
 
         public override void Display()
         {
-            Console.WriteLine($"Book {Name} was created in {Year} year");
+            Console.WriteLine($"Book \"{Name}\" is a {Genre}. This book was created in {Year} year. ");
         }
     }
 
@@ -94,7 +98,7 @@ namespace Millionaire
     {
         static void Main(string[] args)
         {
-            Book book = new Book("Lord of the rings", 1954);
+            Book book = new Book("Lord of the rings", 1954, "Fantasy");
 
             Author author = new Author("J. R. R. Tolkien");
 
