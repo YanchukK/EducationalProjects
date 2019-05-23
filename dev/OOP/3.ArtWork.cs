@@ -10,16 +10,18 @@ namespace Millionaire
     {
         public string Name { get; set; }
         public int Year { get; set; }
+        public Author Author { get; set; }
 
-        public ArtWork(string name, int year)
+        public ArtWork(string name, int year, Author author)
         {
             Name = name;
             Year = year;
+            Author = author;
         }
 
         public virtual void Display()
         {
-            Console.WriteLine($"{Name} was created in {Year} year");
+            Console.WriteLine($"{Name} was created in {Year} year by {Author.Name}");
         }
     }
 
@@ -27,25 +29,25 @@ namespace Millionaire
     {
         public string Genre { get; set; }
 
-        public Book(string name, int year, string genre) : base(name, year)
+        public Book(string name, int year, string genre, Author author) : base(name, year, author)
         {
             this.Genre = genre;
         }
 
         public override void Display()
         {
-            Console.WriteLine($"Book \"{Name}\" is a {Genre}. This book was created in {Year} year. ");
+            Console.WriteLine($"Book \"{Name}\" is a {Genre}. This book was created in {Year} year by {Author.Name}");
         }
     }
 
     class Song : ArtWork
     {
-        public Song(string name, int year) : base(name, year)
+        public Song(string name, int year, Author author) : base(name, year, author)
         { }
 
         public override void Display()
         {
-            Console.WriteLine($"Song {Name} was created in {Year} year");
+            Console.WriteLine($"Song {Name} was created in {Year} year by {Author.Name}");
         }
     }
 
@@ -86,7 +88,6 @@ namespace Millionaire
 
         public void DisplayAllArtWorks()
         {
-            Console.WriteLine($"Author {Name}:");
             for (int i = 0; i < artWorks.Length; i++)
             {
                 artWorks[i].Display();
@@ -98,15 +99,14 @@ namespace Millionaire
     {
         static void Main(string[] args)
         {
-            Book book = new Book("Lord of the rings", 1954, "Fantasy");
+            Author Tolkien = new Author("J. R. R. Tolkien");
 
-            Author author = new Author("J. R. R. Tolkien");
+            Book book = new Book("Lord of the rings", 1954, "Fantasy", Tolkien);
 
-            author.AddArtWork(book);
+            Tolkien.AddArtWork(book);
 
-            author.DisplayAllArtWorks();
-
-
+            Tolkien.DisplayAllArtWorks();
         }
     }
+}
 }
