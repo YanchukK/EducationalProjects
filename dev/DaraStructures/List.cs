@@ -1,32 +1,66 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SourseControlTest
 {
-    class DynamicArr
+    interface IDynamicArr
+    {
+        void Add(object item);
+        void Insert(int index, object item);
+        void Remove(object item);
+        void RemoveAt(int index);
+        void Clear();
+        bool Contains(object item);
+        int IndexOf(object item);
+        object[] ToArray();
+        void Reverse();
+    }
+
+    class DynamicArr : IDynamicArr
     {
         private object[] inner;
+
+        private int сount;
+        public int Count
+        {
+            get
+            {
+                return сount;
+            }
+            private set
+            {
+                if(value > 0)
+                {
+                    сount = value;
+                }
+            }
+        }
 
         public DynamicArr()
         { }
 
-        public DynamicArr(int size)
+        public DynamicArr(int length)
         {
-            inner = new object[size];
+            this.Count = length;
+            inner = new object[this.Count];
+        }
+               
+        //индексатор
+        public object this[int index]
+        {
+            get
+            {
+                return inner[index];
+            }
+            set
+            {
+                inner[index] = value;
+            }
         }
 
-        public int Length()
-        {
-            return inner.Length;
-        }
 
         public void Add(object item)
         {
-            if(inner == null)
+            if (inner == null)
             {
                 inner = new object[] { item };
             }
@@ -49,7 +83,7 @@ namespace SourseControlTest
 
         public void Insert(int index, object item)
         {
-            if(inner == null || inner.Length < index || index < 0)
+            if (inner == null || inner.Length < index || index < 0)
             {
                 Console.WriteLine("Ошибка");
             }
@@ -135,7 +169,7 @@ namespace SourseControlTest
 
             for (int i = 0; i < inner.Length; i++)
             {
-                if(inner[i].Equals(item))
+                if (inner[i].Equals(item))
                 {
                     result = true;
                 }
@@ -143,7 +177,32 @@ namespace SourseControlTest
 
             return result;
         }
-   
+
+        public object[] ToArray()
+        {
+            object[] result = new object[this.Count];
+
+            for (int i = 0; i < this.Count; i++)
+            {
+                result[i] = inner[i];
+            }
+
+            return result;
+        }
+
+        public void Reverse()
+        {
+            object[] result = new object[inner.Length];
+
+            int i = 0;
+            for (int j = inner.Length - 1; j >= 0; j--)
+            {
+                result[i] = inner[j];
+                i++;
+            }
+            
+            inner = result;
+        }
     }
 
     class Program
@@ -155,9 +214,18 @@ namespace SourseControlTest
             dynamicArr.Insert(1, 5);
             dynamicArr.Insert(2, 10);
 
-            dynamicArr.Clear();
+            object[] vs = dynamicArr.ToArray();
 
-            Console.WriteLine(dynamicArr.Length());
+            for (int i = 0; i < vs.Length; i++)
+            {
+                Console.WriteLine(vs[i]);
+            }
+
+            dynamicArr.Reverse();
+
+            dynamicArr[1] = 15;
+
+            Console.WriteLine(dynamicArr[1]);
         }
     }
 }
