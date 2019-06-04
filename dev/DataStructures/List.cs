@@ -1,23 +1,58 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SourseControlTest
+namespace Painting
 {
-    interface IDynamicArr
+    interface IDynamicArr<T>
     {
-        void Add(object item);
-        void Insert(int index, object item);
-        void Remove(object item);
+        void Add(T item);
+        void Insert(int index, T item);
+        void Remove(T item);
         void RemoveAt(int index);
         void Clear();
-        bool Contains(object item);
-        int IndexOf(object item);
-        object[] ToArray();
+        bool Contains(T item);
+        int IndexOf(T item);
+        T[] ToArray();
         void Reverse();
     }
 
-    class DynamicArr : IDynamicArr
+    public class ListEnumerator<T> : IEnumerator<T>
     {
-        private object[] inner;
+        private int i = -1;
+        private List<T> list;
+
+        public ListEnumerator(List<T> list)
+        {
+            this.list = list;
+        }
+
+        public T Current => list[i];
+
+        object IEnumerator.Current => Current;
+
+        public void Dispose()
+        { }
+
+        public bool MoveNext()
+        {
+            i++;
+            return i < list.Count;
+        }
+
+        public void Reset()
+        {
+            i = -1;
+        }
+    }
+    
+
+    public class List<T> : IDynamicArr<T>, IEnumerable<T>
+    {
+        private T[] inner;
 
         private int сount;
         public int Count
@@ -28,24 +63,15 @@ namespace SourseControlTest
             }
             private set
             {
-                if(value > 0)
+                if (value > 0)
                 {
                     сount = value;
                 }
             }
         }
 
-        public DynamicArr()
-        { }
-
-        public DynamicArr(int length)
-        {
-            this.Count = length;
-            inner = new object[this.Count];
-        }
-               
         //индексатор
-        public object this[int index]
+        public T this[int index]
         {
             get
             {
@@ -56,17 +82,16 @@ namespace SourseControlTest
                 inner[index] = value;
             }
         }
-
-
-        public void Add(object item)
+        
+        public void Add(T item)
         {
             if (inner == null)
             {
-                inner = new object[] { item };
+                inner = new T[] { item };
             }
             else
             {
-                object[] newinner = new object[inner.Length + 1];
+                T[] newinner = new T[inner.Length + 1];
 
                 int i = 0;
                 while (i != (newinner.Length - 1))
@@ -79,9 +104,10 @@ namespace SourseControlTest
 
                 inner = newinner;
             }
+            Count++;
         }
 
-        public void Insert(int index, object item)
+        public void Insert(int index, T item)
         {
             if (inner == null || inner.Length < index || index < 0)
             {
@@ -89,7 +115,7 @@ namespace SourseControlTest
             }
             else
             {
-                object[] newinner = new object[inner.Length + 1];
+                T[] newinner = new T[inner.Length + 1];
 
                 int i = 0;
                 while (i != index - 1)
@@ -111,7 +137,7 @@ namespace SourseControlTest
             }
         }
 
-        public void Remove(object item)
+        public void Remove(T item)
         {
             if (IndexOf(item) != -1)
             {
@@ -121,7 +147,7 @@ namespace SourseControlTest
 
         public void RemoveAt(int index)
         {
-            object[] newinner = new object[inner.Length - 1];
+            T[] newinner = new T[inner.Length - 1];
 
             int i = 0;
             while (i != index)
@@ -140,7 +166,7 @@ namespace SourseControlTest
             inner = newinner;
         }
 
-        public int IndexOf(object item)
+        public int IndexOf(T item)
         {
             int index = -1;
 
@@ -158,12 +184,12 @@ namespace SourseControlTest
 
         public void Clear()
         {
-            object[] newinner = new object[0];
+            T[] newinner = new T[0];
 
             inner = newinner;
         }
 
-        public bool Contains(object item)
+        public bool Contains(T item)
         {
             bool result = false;
 
@@ -178,9 +204,9 @@ namespace SourseControlTest
             return result;
         }
 
-        public object[] ToArray()
+        public T[] ToArray()
         {
-            object[] result = new object[this.Count];
+            T[] result = new T[this.Count];
 
             for (int i = 0; i < this.Count; i++)
             {
@@ -192,7 +218,7 @@ namespace SourseControlTest
 
         public void Reverse()
         {
-            object[] result = new object[inner.Length];
+            T[] result = new T[inner.Length];
 
             int i = 0;
             for (int j = inner.Length - 1; j >= 0; j--)
@@ -200,32 +226,18 @@ namespace SourseControlTest
                 result[i] = inner[j];
                 i++;
             }
-            
+
             inner = result;
         }
-    }
 
-    class Program
-    {
-        static void Main(string[] args)
+        public IEnumerator<T> GetEnumerator()
         {
-            DynamicArr dynamicArr = new DynamicArr();
-            dynamicArr.Add(1);
-            dynamicArr.Insert(1, 5);
-            dynamicArr.Insert(2, 10);
+            return new ListEnumerator<T>(this);
+        }
 
-            object[] vs = dynamicArr.ToArray();
-
-            for (int i = 0; i < vs.Length; i++)
-            {
-                Console.WriteLine(vs[i]);
-            }
-
-            dynamicArr.Reverse();
-
-            dynamicArr[1] = 15;
-
-            Console.WriteLine(dynamicArr[1]);
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
