@@ -1,13 +1,57 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace SourseControlTest
+namespace Painting
 {
-    sealed class Node
+    class ListEnumerator<T> : IEnumerator<T>
     {
-        public object Item { get; set; }
-        public Node Next { get; set; }
+        private Node<T> currentNode;
+        private Node<T> first;
 
-        public Node(object item)
+        public ListEnumerator(Node<T> first)
+        {
+            this.first = first;
+        }
+
+        public object Current => currentNode.Item;
+
+        object IEnumerator.Current => Current;
+
+        T IEnumerator<T>.Current => currentNode.Item;
+
+        public bool MoveNext()
+        {
+            if(currentNode == null)
+            {
+                currentNode = first;
+            }
+            else
+            {
+                currentNode = currentNode.Next;
+            }
+            return currentNode.Next != null;
+        }
+
+        public void Reset()
+        {
+            currentNode = null;
+        }
+
+        public void Dispose()
+        { }
+    }
+
+
+    sealed class Node<T>
+    {
+        public T Item { get; set; }
+        public Node<T> Next { get; set; }
+
+        public Node(T item)
         {
             if (item != null)
             {
@@ -16,19 +60,19 @@ namespace SourseControlTest
         }
     }
 
-    interface ILinkedList
-    { 
-        void Add(object item);
-        void AddFirst(object item);
-        void Insert(Node node, object item);
+    interface ILinkedList<T>
+    {
+        void Add(T item);
+        void AddFirst(T item);
+        void Insert(Node<T> node, T item);
         void Clear();
-        bool Contains(object item);
-        object[] ToArray();
+        bool Contains(T item);
+        T[] ToArray();
     }
 
 
 
-    class LinkedList : ILinkedList
+    class LinkedList<T> : ILinkedList<T>, IEnumerable<T>
     {
         private int сount;
         public int Count
@@ -47,13 +91,13 @@ namespace SourseControlTest
         }
 
 
-        public Node First { get; private set; }
+        public Node<T> First { get; private set; }
 
-        public Node Last { get; private set; }
+        public Node<T> Last { get; private set; }
 
-        public void Add(object item)
+        public void Add(T item)
         {
-            Node node = new Node(item);
+            Node<T> node = new Node<T>(item);
 
             if (First == null)
             {
@@ -69,9 +113,9 @@ namespace SourseControlTest
             Count++;
         }
 
-        public void AddFirst(object item)
+        public void AddFirst(T item)
         {
-            Node node = new Node(item);
+            Node<T> node = new Node<T>(item);
 
             if (First == null)
             {
@@ -87,13 +131,13 @@ namespace SourseControlTest
             Count++;
         }
 
-        public void Insert(Node node, object item)
+        public void Insert(Node<T> node, T item)
         {
-            Node newnode = new Node(item);
+            Node<T> newnode = new Node<T>(item);
 
-            if(Contains(node.Item))
+            if (Contains(node.Item))
             {
-                Node previous = PreviousNode(node);
+                Node<T> previous = PreviousNode(node);
 
                 previous.Next = newnode;
                 newnode.Next = node;
@@ -102,11 +146,11 @@ namespace SourseControlTest
             Count++;
         }
 
-        public bool Contains(object item)
+        public bool Contains(T item)
         {
             bool result = false;
 
-            Node node = First;
+            Node<T> node = First;
 
             for (int i = 0; i < Count; i++)
             {
@@ -124,15 +168,15 @@ namespace SourseControlTest
             return result;
         }
 
-        private Node PreviousNode(Node node)
+        private Node<T> PreviousNode(Node<T> node)
         {
-            if(First.Equals(node))
+            if (First.Equals(node))
             {
                 return node;
             }
             else
             {
-                Node result = First;
+                Node<T> result = First;
 
                 for (int i = 0; i < Count; i++)
                 {
@@ -156,11 +200,11 @@ namespace SourseControlTest
             Last = null;
         }
 
-        public object[] ToArray() // возвращает массив объектов значений
+        public T[] ToArray() // возвращает массив объектов значений
         {
-            object[] result = new object[Count];
+            T[] result = new T[Count];
 
-            Node node = First;
+            Node<T> node = First;
 
             for (int i = 0; i < Count; i++)
             {
@@ -171,47 +215,14 @@ namespace SourseControlTest
             return result;
         }
 
-        //public object[] ToArray() // возвращает массив объектов классов
-        //{
-        //    object[] result = new object[Count];
-
-        //    Node node = First;
-
-        //    for (int i = 0; i < Count; i++)
-        //    {
-        //        result[i] = node;
-        //        node = node.Next;
-        //    }
-
-        //    return result;
-        //}
-
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
+        public IEnumerator<T> GetEnumerator()
         {
-            LinkedList list = new LinkedList();
+            return new ListEnumerator<T>(First);
+        }
 
-            list.Add(1);
-            list.Add(2);
-            list.AddFirst(3);
-
-            if (list.Contains(2))
-            {
-                Console.WriteLine("Содержит");
-            }
-
-            if (!list.Contains(4))
-            {
-                Console.WriteLine("Не содержит");
-            }
-
-            list.Insert(list.First.Next, 5);
-
-            object[] vs = list.ToArray();
-
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }
