@@ -232,6 +232,8 @@ namespace Painting
 
         public IEnumerator<T> GetEnumerator()
         {
+        for (int i = 0; i < count; i++)
+                yield return random.Next();
             return new ListEnumerator<T>(this);
         }
 
